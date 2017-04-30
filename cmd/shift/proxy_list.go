@@ -14,7 +14,7 @@ type ProxyList struct {
 }
 
 // Random method is used to get a random proxy from a random sublist.
-// This will continue till it gets a successfull proxy (meaning no 403, 302, 307 or 407s)
+// This will continue till it gets a successful proxy (meaning no 403, 302, 307 or 407s)
 func (p ProxyList) Random() Proxy {
 	px := Proxy{}
 	for {
