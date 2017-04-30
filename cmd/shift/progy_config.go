@@ -44,7 +44,8 @@ func (c *Config) Check(proxyList *ProxyList) error {
 			fmt.Printf("%s@%s fails : Unable to read from the connection\n", val.Username, val.RemoteProxyAddress)
 		case result >= 200 && result < 300:
 			fmt.Printf("%s@%s passes : %d\n", val.Username, val.RemoteProxyAddress, result)
-		case result == ErrProxyRedirection && result == ErrProxySuccessfulRedirection:
+		case result == ErrProxyRedirection:
+		case result == ErrProxySuccessfulRedirection:
 			fmt.Printf("%s@%s fails : Quota Over\n", val.Username, val.RemoteProxyAddress)
 		case result == ErrForbidden:
 			fmt.Printf("%s@%s fails : Forbidden\n", val.Username, val.RemoteProxyAddress)
