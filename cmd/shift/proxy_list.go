@@ -6,6 +6,7 @@ import (
 	"math/rand"
 	"regexp"
 	"strings"
+	"time"
 )
 
 // ProxyList is a type (map or structs) for containing Credentials of different remote proxies.
@@ -17,6 +18,7 @@ type ProxyList struct {
 // This will continue till it gets a successful proxy (meaning no 403, 302, 307 or 407s)
 func (p ProxyList) Random() Proxy {
 	px := Proxy{}
+	rand.Seed(time.Now().Unix())
 	for {
 		x := rand.Intn(len(p.Proxies))
 		fmt.Println(len(p.Proxies), x)
