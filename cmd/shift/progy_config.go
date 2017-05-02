@@ -63,7 +63,7 @@ func (c *Config) Check(proxyList *ProxyList) error {
 		}
 	}
 	if changed {
-		barr, err := json.Marshal(c)
+		barr, err := json.MarshalIndent(c, "", "    ")
 		if err != nil {
 			return err
 		}
