@@ -12,7 +12,7 @@ import (
 var homeDir = os.Getenv("HOME")
 
 // Build Variables
-var appVersion string = "v0.00"
+var appVersion = "v0.00"
 var appBuildDate string
 var appBuildPlatform string
 
@@ -55,7 +55,10 @@ func main() {
 		return
 	}
 
-	conf.Check(plist)
+	err = conf.Check(plist)
+	if err != nil {
+		fmt.Println(err)
+	}
 	for {
 		select {
 		case <-time.After(time.Second * 5):
