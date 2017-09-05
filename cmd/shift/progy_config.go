@@ -61,32 +61,33 @@ func (c *Config) Check(proxyList *ProxyList) error {
 			c.Creds[i].Username = p.Username
 			c.Creds[i].Password = p.Password
 		}
-	}
-	if changed {
-		barr, err := json.MarshalIndent(c, "", "    ")
-		if err != nil {
-			return err
+		if changed {
+			barr, err := json.MarshalIndent(c, "", "    ")
+			if err != nil {
+				return err
+			}
+			err = ioutil.WriteFile(c.Filename, barr, 0644)
+			if err != nil {
+				return err
+			}
+			conn, err := net.Dial("unix", c.ControlPort)
+			if err != nil {
+				return err
+			}
+			_, err = conn.Write([]byte("RELOAD " + c.Filename + "\n"))
+			if err != nil {
+				return err
+			}
+			resp, err := ioutil.ReadAll(conn)
+			if err != nil {
+				return err
+			}
+			if string(resp) != "SUCCESS\n" {
+				return errors.New("Unable to reload the proGY daemon")
+			}
+			fmt.Println("Daemon reloaded")
+			changed = false
 		}
-		err = ioutil.WriteFile(c.Filename, barr, 0644)
-		if err != nil {
-			return err
-		}
-		conn, err := net.Dial("unix", c.ControlPort)
-		if err != nil {
-			return err
-		}
-		_, err = conn.Write([]byte("RELOAD " + c.Filename + "\n"))
-		if err != nil {
-			return err
-		}
-		resp, err := ioutil.ReadAll(conn)
-		if err != nil {
-			return err
-		}
-		if string(resp) != "SUCCESS\n" {
-			return errors.New("Unable to reload the proGY daemon")
-		}
-		fmt.Println("Daemon reloaded")
 	}
 	return nil
 }
